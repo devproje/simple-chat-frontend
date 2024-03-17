@@ -1,0 +1,91 @@
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 300;
+    src: url("/fonts/PretendardVariable.woff2");
+}
+
+@font-face {
+    font-family: "JetBrainsMono";
+    font-weight: 300;
+    src: url("/fonts/JetBrainsMono-Regular.woff2");
+}
+
+@font-face {
+    font-family: "NotoColorEmoji";
+    font-weight: 300;
+    src: url("/fonts/NotoColorEmoji-Regular.ttf");
+}
+
+:root {
+    --font-default: "Pretendard", "NotoColorEmoji", serif;
+    --font-mono: "JetBrainsMono", serif;
+
+    --btn-color: rgba(255, 255, 255, 0.85);
+    --input-height: 35px;
+    --font-size: 13pt;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    color: white;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    background-color: #23252b;
+    overflow-x: hidden;
+    max-width: 100vw;
+    height: 100vh;
+}
+
+body {
+    font-family: var(--font-default);
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+input {
+    border: none;
+    padding: 0 7px;
+    background-color: #101111;
+    transition-duration: 300ms;
+    height: var(--input-height);
+    font-size: var(--font-size);
+
+    &:focus {
+        outline: none;
+        user-select: none;
+        transition-duration: 300ms;
+    }
+}
+
+button {
+    border: none;
+    background-color: #343742;
+    transition-duration: 300ms;
+    height: var(--input-height);
+    font-size: var(--font-size);
+    color: var(--btn-color);
+
+    &:hover {
+        color: #ffffff;
+        transition-duration: 300ms;
+        background-color: rgba(72, 76, 90, 0.7);
+    }
+
+    &:focus {
+        transition-duration: 300ms;
+        color: rgba(255, 255, 255, 0.6);
+        background-color: rgba(52, 55, 66, 0.7);
+    }
+}
+
+pre,
+code {
+    font-family: var(--font-mono);
+}
