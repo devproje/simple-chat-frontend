@@ -19,6 +19,7 @@
 :root {
     --font-default: "Pretendard", "NotoColorEmoji", serif;
     --font-mono: "JetBrainsMono", serif;
+    --online-color: #2a2d35;
 
     --btn-color: rgba(255, 255, 255, 0.85);
     --input-height: 35px;
@@ -28,7 +29,7 @@
 * {
     margin: 0;
     padding: 0;
-    color: white;
+    color: #dddddd;
     box-sizing: border-box;
 }
 
@@ -47,6 +48,21 @@ body {
     align-items: center;
     flex-direction: column;
     justify-content: center;
+}
+
+a {
+    text-decoration: none;
+    transition-duration: 300ms;
+
+    &:hover {
+        color: #ffffff;
+        transition-duration: 300ms;
+    }
+
+    &:focus {
+        color: #cccccc;
+        transition-duration: 300ms;
+    }
 }
 
 input {
@@ -88,4 +104,8 @@ button {
 pre,
 code {
     font-family: var(--font-mono);
+}
+
+footer {
+    margin-top: 30px;
 }
