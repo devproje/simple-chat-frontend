@@ -1,33 +1,39 @@
 import styles from "@/styles/modules/Chat.module.scss";
+import { make, payloadType } from "@/util/make";
+import React from "react";
 
-function sendForm(event, /** @type {WebSocket} */ sock) {
-    event.preventDefault();
-    sock.send(make("new_message", message.current.value));
-    message.current.value = "";
+function send(ev, socket, ref) {
+    ev.preventDefault();
+    socket.send(make(payloadType.newMessage, ref.current.value));
+    ref.current.value = "";
 }
 
-export function Chat() {
+export function Chat({ socket, messages }) {
+    const value = React.createRef();
     return (
-        <div className={styles.root}>
-            <div className={styles.container}>
-                <div className={styles.nav}>
-                    <h1>Personal IRC Simple Chat</h1>
-                </div>
+        <>
+            <div className={styles.chat_container}>
                 <div className={styles.chat_area}>
-                    <div className={styles.msg_list}>
-                        {messages.map((msg, index) => (
-                            <div key={index} className={styles.msg}>
-                                <p>{msg}</p>
-                            </div>
-                        ))}
+                    <div className={styles.nav}>
+                        <h1>Personal IRC Simple Chat</h1>
                     </div>
-                    <form className={styles.chat} id="send" onSubmit={ev => sendForm(ev, socket)}>
-                        <input ref={message} type="text" placeholder="Type message here" required/>
+                    <div className={styles.msg_list}>
+                        {
+                            messages.forEach((msg) => {
+                                console.log(msg);
+                                return <div className={styles.msg}>
+                                    <p>{msg}</p>
+                                </div>
+                            })
+                        }
+                    </div>
+                    <form className={styles.input} onSubmit={ev => send(ev, socket, value)}>
+                        <input type="text" ref={value} placeholder="Type your message here" required />
                         <button type="submit">Send</button>
                     </form>
                 </div>
+                <div className={styles.user_list}></div>
             </div>
-            <div className={styles.online}></div>
-        </div>
+        </>
     );
 }

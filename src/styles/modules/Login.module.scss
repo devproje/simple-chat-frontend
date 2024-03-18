@@ -1,0 +1,21 @@
+.input {
+    --input-width: 300px;
+    --btn-width: 70px;
+    
+    margin-top: 30px;
+
+    input {
+        width: var(--input-width);
+        border-radius: 5px 0 0 5px;
+    }
+
+    button {
+        width: var(--btn-width);
+        border-radius: 0 5px 5px 0;
+    }
+}
+
+.except {
+    padding: 7px;
+    color: #d42f2f;
+}

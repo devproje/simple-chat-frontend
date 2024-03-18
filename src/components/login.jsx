@@ -1,28 +1,36 @@
-function nicknameForm(event, /** @type {WebSocket} */ sock, [login, setLogin]) {
-    event.preventDefault();
+import styles from "@/styles/modules/Login.module.scss";
+import { make, payloadType } from "@/util/make";
+import React from "react";
+
+function send(ev, ref, except, socket, [login, setLogin]) {
+    ev.preventDefault();
     if (login) {
         return;
     }
 
-    if (sock.readyState !== WebSocket.OPEN) {
-        console.log(exceptMessage.current);
-        exceptMessage.current.textContent = "Error: IRC Server not opened.";
+    if (socket.readyState !== WebSocket.OPEN) {
+        except.current.innerText = "IRC Server is offline.";
         return;
     }
     
-    sock.send(make("set_username", nickname.current.value));
-    nickname.current.value = "";
+    const value = ref.current.value;
+    socket.send(make(payloadType.setUsername, value));
+    
+    ref.current.value = "";
     setLogin(true);
 }
 
 export function Login({ socket, login, setLogin }) {
+    const value = React.createRef();
+    const except = React.createRef();
+
     return (
         <>
             <h1>Personal IRC Simple Chat</h1>
-            <form className={styles.nickname} id="nickname" onSubmit={ev => nicknameForm(ev, socket, [login, setLogin])}>
-                <code ref={exceptMessage} className={styles.except}></code>
+            <form className={styles.input} onSubmit={ev => send(ev, value, except, socket, [login, setLogin])}>
+                <code className={styles.except} ref={except}></code>
                 <div>
-                    <input ref={nickname} type="text" placeholder="Type your nickname here" required />
+                    <input type="text" ref={value} placeholder="Type your nickname here" required />
                     <button type="submit">Login</button>
                 </div>
             </form>

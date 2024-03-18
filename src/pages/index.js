@@ -1,45 +1,36 @@
 import Head from "next/head";
-import process from "process";
-import { make } from "@/util/make";
 import React, { useState } from "react";
 import "bootstrap-icons/font/bootstrap-icons.scss";
 import styles from "@/styles/modules/Home.module.scss";
 import { Login } from "@/components/login";
+import { Chat } from "@/components/chat";
 
-function createSocket() {
-    /** @type {WebSocket} */
-    let ws;
-    try {
-        const url = process.env("WS_URL").toString();
-        console.log(url);
-        ws = new WebSocket(url);
-    } catch (err) {
-        console.error(err);
-        return;
-    }
-    
-    return ws;
+let socket; 
+try {
+    socket = new WebSocket("ws://localhost:8080/ws");
+} catch(err) {
+    // IGNORED
 }
-
-let message = React.createRef();
-let nickname = React.createRef();
-let exceptMessage = React.createRef();
 
 export default function Home() {
     const [login, setLogin] = useState(false);
     const [messages, setMessages] = useState([]);
 
-    let socket;
     try {
-        socket = new createSocket();
+        socket.onmessage = (event) => {
+            setMessages(prev => [...prev, event.data]);
+        };
     } catch (err) {
-        console.error(err);
-        return;
+        console.error("no connection to irc server");
     }
-    
-    socket.onmessage = (event) => {
-        setMessages(prev => [...prev, event.data]);
-    };
+
+    function render() {
+        if (!login) {
+            return <Login socket={socket} login={login} setLogin={setLogin}/>
+        }
+
+        return <Chat socket={socket} messages={messages}/>;
+    }
 
     return (
         <>
@@ -50,7 +41,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>
-                {login ? "Hello!" : <Login socket={socket} login={login} setLogin={setLogin}/>}
+                {render()}
             </main>
         </>
     );
