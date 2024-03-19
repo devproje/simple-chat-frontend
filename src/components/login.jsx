@@ -1,5 +1,5 @@
 import styles from "@/styles/modules/Login.module.scss";
-import { make, payloadType } from "@/util/make";
+import { make } from "@/util/make";
 import React from "react";
 
 function send(ev, ref, except, socket, [login, setLogin]) {
@@ -14,7 +14,7 @@ function send(ev, ref, except, socket, [login, setLogin]) {
     }
     
     const value = ref.current.value;
-    socket.send(make(payloadType.setUsername, value));
+    socket.send(make("set_username", value));
     
     ref.current.value = "";
     setLogin(true);
