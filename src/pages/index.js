@@ -14,22 +14,13 @@ try {
 
 export default function Home() {
     const [login, setLogin] = useState(false);
-    const [messages, setMessages] = useState([]);
-
-    try {
-        socket.onmessage = (event) => {
-            setMessages(prev => [...prev, event.data]);
-        };
-    } catch (err) {
-        console.error("no connection to irc server");
-    }
 
     function render() {
         if (!login) {
-            return <Login socket={socket} login={login} setLogin={setLogin}/>
+            return <Login socket={socket} login={login} setLogin={setLogin} />
         }
 
-        return <Chat socket={socket} messages={messages}/>;
+        return <Chat socket={socket} />;
     }
 
     return (

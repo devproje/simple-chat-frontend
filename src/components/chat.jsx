@@ -1,6 +1,6 @@
 import styles from "@/styles/modules/Chat.module.scss";
 import { make, payloadType } from "@/util/make";
-import React from "react";
+import React, { useState } from "react";
 
 function send(ev, socket, ref) {
     ev.preventDefault();
@@ -8,8 +8,18 @@ function send(ev, socket, ref) {
     ref.current.value = "";
 }
 
-export function Chat({ socket, messages }) {
+export function Chat({ socket }) {
+    const [messages, setMessages] = useState([]);
     const value = React.createRef();
+    
+    try {
+        socket.onmessage = (event) => {
+            setMessages(prev => [...prev, event.data]);
+        };
+    } catch (err) {
+        console.error("no connection to irc server");
+    }
+
     return (
         <>
             <div className={styles.chat_container}>
@@ -19,12 +29,13 @@ export function Chat({ socket, messages }) {
                     </div>
                     <div className={styles.msg_list}>
                         {
-                            messages.forEach((msg) => {
-                                console.log(msg);
-                                return <div className={styles.msg}>
-                                    <p>{msg}</p>
-                                </div>
-                            })
+                            messages.map(
+                                (msg, index) => (
+                                    <div className={styles.msg} key={index}>
+                                        <p>{msg}</p>
+                                    </div>
+                                )
+                            )
                         }
                     </div>
                     <form className={styles.input} onSubmit={ev => send(ev, socket, value)}>
