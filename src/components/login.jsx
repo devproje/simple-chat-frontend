@@ -8,35 +8,33 @@ function send(ev, ref, except, socket, [login, setLogin]) {
         return;
     }
 
-    if (socket.readyState !== WebSocket.OPEN) {
+    try {
+        const value = ref.current.value;
+        socket.send(make("set_username", value));
+    } catch (err) {
         except.current.innerText = "IRC Server is offline.";
         return;
     }
-    
-    const value = ref.current.value;
-    socket.send(make("set_username", value));
-    
+        
     ref.current.value = "";
     setLogin(true);
 }
 
 export function Login({ socket, login, setLogin }) {
-    const value = React.createRef();
+    const ref = React.createRef();
     const except = React.createRef();
 
     return (
         <>
             <h1>Personal IRC Simple Chat</h1>
-            <form className={styles.input} onSubmit={ev => send(ev, value, except, socket, [login, setLogin])}>
+            <form className={styles.input} onSubmit={ev => send(ev, ref, except, socket, [login, setLogin])}>
                 <code className={styles.except} ref={except}></code>
-                <div>
-                    <input type="text" ref={value} placeholder="Type your nickname here" required />
-                    <button type="submit">Login</button>
-                </div>
+                <input type="text" ref={ref} placeholder="Type your nickname here" required />
+                <button type="submit">Login</button>
             </form>
             <footer>
                 <strong>Simple Chat</strong> by <a href="https://github.com/devproje">Project_IO</a>.
-                The source code is licensed <strong><a href="https://github.com/devproje/simple-chat-frontend/blob/master/LICENSE">MIT</a></strong>.
+                This project is license for <strong><a href="https://github.com/devproje/simple-chat-frontend/blob/master/LICENSE">MIT</a></strong>.
             </footer>
         </>
     );

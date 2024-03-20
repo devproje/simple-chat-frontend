@@ -3,19 +3,35 @@
     --btn-width: 70px;
     
     margin-top: 30px;
+    display: flex;
+    flex-direction: column;
 
-    input {
+    input[type="text"] {
         width: var(--input-width);
-        border-radius: 5px 0 0 5px;
+        border-radius: 5px;
+        margin: 0 0 5px 0;
+    }
+
+    input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+        margin: 0 10px 0 0;
     }
 
     button {
-        width: var(--btn-width);
-        border-radius: 0 5px 5px 0;
+        width: var(--input-width);
+        border-radius: 5px;
+        margin: 10px 0;
     }
 }
 
+.addr {
+    width: 370px;
+    border-radius: 5px;
+}
+
 .except {
-    padding: 7px;
+    padding: 0 0 5px 7px;
+    font-size: 11pt;
     color: #d42f2f;
 }

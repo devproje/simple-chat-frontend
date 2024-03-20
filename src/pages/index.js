@@ -5,19 +5,21 @@ import styles from "@/styles/modules/Home.module.scss";
 import { Login } from "@/components/login";
 import { Chat } from "@/components/chat";
 
-let socket; 
-try {
-    socket = new WebSocket("ws://localhost:8080/ws");
-} catch(err) {
-    // IGNORED
+/** @type {WebSocket} */
+let socket;
+
+function createSocket(type, addr) {
+    socket = new WebSocket(`${type}://${addr}/ws`);
 }
 
 export default function Home() {
     const [login, setLogin] = useState(false);
 
+    createSocket("ws", "localhost:8080");
+
     function render() {
         if (!login) {
-            return <Login socket={socket} login={login} setLogin={setLogin} />
+            return <Login socket={socket} createSocket={createSocket} login={login} setLogin={setLogin} />
         }
 
         return <Chat socket={socket} />;

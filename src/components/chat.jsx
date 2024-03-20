@@ -22,13 +22,14 @@ export function Chat({ socket }) {
                 let msg;
                 const data = JSON.parse(event.data);
 
+                
                 function getUsers() {
-                    const url = "http://localhost:8080/v1/users";
+                    const url = `http://${socket.url.replace("ws://", "").replace("/ws", "")}/v1/users`;
                     fetch(url).then(data => data.json()).then((json) => {
                         setUsers(json.users);
                     });
                 }
-    
+                
                 switch (data.type) {
                     case "new_message":
                         msg = `<strong>${data.author}</strong>: ${data.payload}`;
