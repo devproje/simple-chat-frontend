@@ -10,7 +10,7 @@ function send(ev, socket, ref) {
     ref.current.value = "";
 }
 
-export function Chat({ socket }) {
+export function Chat({ socket, props }) {
     const [messages, setMessages] = useState([]);
     const [users, setUsers] = useState([]);
     const chat = useChatScroll(messages);

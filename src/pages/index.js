@@ -12,17 +12,21 @@ function createSocket(type, addr) {
     socket = new WebSocket(`${type}://${addr}/ws`);
 }
 
-export default function Home() {
+export default function Home({ url, wsType }) {
     const [login, setLogin] = useState(false);
 
-    createSocket("ws", "localhost:8080");
+    createSocket(wsType, url);
+    const props = {
+        url: url,
+        wsType: wsType
+    };
 
     function render() {
         if (!login) {
-            return <Login socket={socket} createSocket={createSocket} login={login} setLogin={setLogin} />
+            return <Login socket={socket} props={props} createSocket={createSocket} login={login} setLogin={setLogin} />
         }
 
-        return <Chat socket={socket} />;
+        return <Chat socket={socket} props={props} />;
     }
 
     return (
@@ -38,4 +42,16 @@ export default function Home() {
             </main>
         </>
     );
+}
+
+export async function getStaticProps() {
+    const url = process.env.URL;
+    const wsType = process.env.WS_TYPE;
+
+    return {
+        props: {
+            url: url,
+            wsType: wsType
+        }
+    };
 }
