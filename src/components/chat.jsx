@@ -6,15 +6,20 @@ import sanitize from "sanitize-html";
 
 function send(ev, socket, ref) {
     ev.preventDefault();
+    
     socket.send(make("new_message", ref.current.value));
     ref.current.value = "";
 }
 
-export function Chat({ socket, props }) {
+export function Chat({ socket, secure }) {
     const [messages, setMessages] = useState([]);
     const [users, setUsers] = useState([]);
     const chat = useChatScroll(messages);
     const value = React.createRef();
+    let type = "http";
+    if (secure) {
+        type = "https";
+    }
 
     useState(() => {
         try {
@@ -24,7 +29,7 @@ export function Chat({ socket, props }) {
 
                 
                 function getUsers() {
-                    const url = `http://${socket.url.replace("ws://", "").replace("/ws", "")}/v1/users`;
+                    const url = `${socket.url.replace("ws://", `${type}://`).replace("/ws", "")}/v1/users`;
                     fetch(url).then(data => data.json()).then((json) => {
                         setUsers(json.users);
                     });
@@ -55,7 +60,7 @@ export function Chat({ socket, props }) {
             <div className={styles.chat_container}>
                 <div className={styles.chat_area}>
                     <div className={styles.nav}>
-                        <h1>Personal IRC Simple Chat</h1>
+                        <h1>IRC Simple Chat</h1>
                     </div>
                     <div className={styles.msg_list} ref={chat}>
                         {
@@ -78,7 +83,8 @@ export function Chat({ socket, props }) {
                 </div>
                 <div className={styles.user_list}>
                     <div className={styles.user_title}>
-                        <h2>User List</h2>
+                        <h3>User List</h3>
+                        <p>Online: {users.length}</p>
                     </div>
                     {
                         users.map((user, index) => (
