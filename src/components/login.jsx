@@ -7,15 +7,18 @@ function send(ref, addr, except, socket, [login, setLogin]) {
         return;
     }
 
-    const value = ref.current.value;
     if (socket.readyState !== socket.OPEN) {
+        setFadeOut(false);
         except.current.innerText = "IRC Server is offline.";
         return;
     }
-    
+
+    const value = ref.current.value;
     socket.send(make("set_username", value));
+        
     ref.current.value = "";
     addr.current.value = "";
+        
     setLogin(true);
 }
 
@@ -23,7 +26,7 @@ function replaceURL(src) {
     return src.replace("https://", "").replace("http://", "").replace("ws://", "").replace("wss://", "");
 }
 
-export function Login({ secure, setSecure, createSocket, login, setLogin }) {
+export function Login({ createSocket, secure, setSecure, login, setLogin }) {
     const ref = React.createRef();
     const addr = React.createRef();
     const except = React.createRef();

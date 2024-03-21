@@ -29,7 +29,7 @@ export default function Home() {
                 login={login} setLogin={setLogin}
             />
         }
-
+        
         return <Chat socket={socket} secure={secure} />;
     }
 
