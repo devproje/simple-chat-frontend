@@ -2,17 +2,25 @@ import styles from "@/styles/modules/Login.module.scss";
 import { make } from "@/util/make";
 import React from "react";
 
-function send(ref, addr, socket, [login, setLogin]) {
+function send(ref, addr, except, socket, [login, setLogin]) {
     if (login) {
         return;
     }
 
     const value = ref.current.value;
+    if (socket.readyState !== socket.OPEN) {
+        except.current.innerText = "IRC Server is offline.";
+        return;
+    }
     
     socket.send(make("set_username", value));
     ref.current.value = "";
     addr.current.value = "";
     setLogin(true);
+}
+
+function replaceURL(src) {
+    return src.replace("https://", "").replace("http://", "").replace("ws://", "").replace("wss://", "");
 }
 
 export function Login({ secure, setSecure, createSocket, login, setLogin }) {
@@ -23,20 +31,17 @@ export function Login({ secure, setSecure, createSocket, login, setLogin }) {
 
     return (
         <>
-            <h1>IRC Simple Chat Client</h1>
+            <h1>Simple Chat Client</h1>
             <form className={styles.input} onSubmit={ev => {
                 ev.preventDefault();
+                
                 /** @type {WebSocket} */
-                let socket = createSocket(secure, addr.current.value);
+                let socket = createSocket(secure, replaceURL(addr.current.value));
+                except.current.innerText = "Connect...";
 
                 setTimeout(() => {
-                    if (socket.readyState !== socket.OPEN) {
-                        except.current.innerText = "IRC Server is offline.";
-                        return;
-                    }
-
-                    send(ref, addr, socket, [login, setLogin]);
-                }, 300);
+                    send(ref, addr, except, socket, [login, setLogin]);
+                }, 1000);
             }}>
                 <code className={styles.except} ref={except}></code>
                 <input type="text" ref={addr} placeholder="Type your address here" required />
