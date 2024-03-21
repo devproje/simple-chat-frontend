@@ -30,6 +30,7 @@ function press(ev, ref) {
 export function Chat({ socket, secure }) {
     const [messages, setMessages] = useState([]);
     const [users, setUsers] = useState([]);
+    const [name, setName] = useState(null);
     const chat = useChatScroll(messages);
     const value = React.createRef();
     const btn = React.createRef();
@@ -40,10 +41,17 @@ export function Chat({ socket, secure }) {
 
     useState(() => {
         try {
+            function getServerName() {
+                const url = `${replaceURL(socket.url, type)}/v1/server`;
+                fetch(url).then(data => data.json()).then((json) => {
+                    setName(json.name);
+                });
+            }
+            
+            getServerName();
             socket.onmessage = (event) => {
                 let msg;
                 const data = JSON.parse(event.data);
-
                 
                 function getUsers() {
                     const url = `${replaceURL(socket.url, type)}/v1/users`;
@@ -51,7 +59,7 @@ export function Chat({ socket, secure }) {
                         setUsers(json.users);
                     });
                 }
-                
+
                 switch (data.type) {
                     case "new_message":
                         msg = `**${data.author}:** ${data.payload}`;
@@ -67,6 +75,8 @@ export function Chat({ socket, secure }) {
     
                 setMessages(prev => [...prev, msg]);
             };
+
+            // TODO: create fade in here
         } catch (err) {
             console.error("no connection to irc server");
         }
@@ -76,7 +86,7 @@ export function Chat({ socket, secure }) {
         <>
             <div className={styles.chat_container}>
                 <div className={styles.nav}>
-                    <h1>Title</h1>
+                    <h1>{name}</h1>
                         <div>
                         <p>Online: {users.length > 1 ? `${users.length} Users` : `${users.length} User`}</p>
                         <button>
