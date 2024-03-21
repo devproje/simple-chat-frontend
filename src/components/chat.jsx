@@ -11,6 +11,10 @@ function send(ev, socket, ref) {
     ref.current.value = "";
 }
 
+function replaceURL(src, type) {
+    return src.replace("ws://", `${type}://`).replace("wss://", `${type}://`).replace("/ws", "");
+}
+
 export function Chat({ socket, secure }) {
     const [messages, setMessages] = useState([]);
     const [users, setUsers] = useState([]);
@@ -29,7 +33,7 @@ export function Chat({ socket, secure }) {
 
                 
                 function getUsers() {
-                    const url = `${socket.url.replace("ws://", `${type}://`).replace("/ws", "")}/v1/users`;
+                    const url = `${replaceURL(socket.url, type)}/v1/users`;
                     fetch(url).then(data => data.json()).then((json) => {
                         setUsers(json.users);
                     });
@@ -63,18 +67,16 @@ export function Chat({ socket, secure }) {
                         <h1>IRC Simple Chat</h1>
                     </div>
                     <div className={styles.msg_list} ref={chat}>
-                        {
-                            messages.map((msg, index) => (
-                                <div className={styles.msg} key={index}>
-                                    <p dangerouslySetInnerHTML={{
-                                        __html: sanitize(msg, {
-                                            allowedAttributes: false,
-                                            allowVulnerableTags: false,
-                                        })
-                                    }}></p>
-                                </div>
-                            ))
-                        }
+                        {messages.map((msg, index) => (
+                            <div className={styles.msg} key={index}>
+                                <p dangerouslySetInnerHTML={{
+                                    __html: sanitize(msg, {
+                                        allowedAttributes: false,
+                                        allowVulnerableTags: false,
+                                    })
+                                }}></p>
+                            </div>
+                        ))}
                     </div>
                     <form className={styles.input} onSubmit={ev => send(ev, socket, value)}>
                         <input type="text" ref={value} placeholder="Type your message here" required />
@@ -86,13 +88,11 @@ export function Chat({ socket, secure }) {
                         <h3>User List</h3>
                         <p>Online: {users.length}</p>
                     </div>
-                    {
-                        users.map((user, index) => (
-                            <div className={styles.user} key={index}>
-                                <h3>{user.name}</h3>
-                            </div>
-                        ))
-                    }
+                    {users.map((user, index) => (
+                        <div className={styles.user} key={index}>
+                            <h3>{user.name}</h3>
+                        </div>
+                    ))}
                 </div>
             </div>
         </>

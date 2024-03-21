@@ -19,7 +19,7 @@ function createSocket(secure, addr) {
 
 export default function Home() {
     const [login, setLogin] = useState(false);
-    const [secure, setSecure] = useState(false);
+    const [secure, setSecure] = useState(true);
 
     function render() {
         if (!login) {

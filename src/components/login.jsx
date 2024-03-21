@@ -43,9 +43,9 @@ export function Login({ secure, setSecure, createSocket, login, setLogin }) {
                 <input type="text" ref={ref} placeholder="Type your nickname here" required />
                 <div>
                     <input type="checkbox" ref={secureRef} onClick={() => {
-                        setSecure(secureRef.current.checked);
+                        setSecure(!secureRef.current.checked);
                     }}/>
-                    <label htmlFor={addr}>Secure connection option</label>
+                    <label htmlFor={addr}>Unsecured connection option</label>
                 </div>
                 <button type="submit">Login</button>
             </form>
