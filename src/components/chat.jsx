@@ -1,10 +1,8 @@
 import styles from "@/styles/modules/Chat.module.scss";
 import "bootstrap-icons/font/bootstrap-icons.scss";
 import { useChatScroll } from "@/util/scroll";
-import DOMPurify from "isomorphic-dompurify";
 import React, { useState } from "react";
 import { make } from "@/util/make";
-import { marked } from "marked";
 import { SideBar } from "./sidebar";
 
 function send(ev, socket, ref, isDisabled) {
@@ -72,14 +70,14 @@ export function Chat({ socket, secure, setLogin }) {
                 
                 switch (data.type) {
                     case "new_message":
-                        msg = `**${data.author}:** ${data.payload}`;
+                        msg = `${data.author}: ${data.payload}`;
                         break;
                     case "set_username":
-                        msg = `**${data.payload}** has joined the chat.`;
+                        msg = `${data.payload} has joined the chat.`;
                         getUsers();
                         break;
                         case "left_user":
-                            msg = `**${data.payload}** left the chat.`;
+                            msg = `${data.payload} left the chat.`;
                             getUsers();
                         }
                             
@@ -106,9 +104,7 @@ export function Chat({ socket, secure, setLogin }) {
                     <div className={styles.chat} ref={chat}>
                         {messages.map((msg, index) => (
                             <div className={styles.message} key={index}>
-                                <p className={styles.text} dangerouslySetInnerHTML={{
-                                    __html: DOMPurify.sanitize(marked(msg))
-                                }}></p>
+                                <p className={styles.text}>{msg}</p>
                             </div>
                         ))}
                     </div>
