@@ -24,14 +24,21 @@
     --input-default-height: 35px;
 
     --background: #0b0c16;
-    --font-color: #eeeeee;
-    --input: #0b0c16;
+    --input: #18192b;
+    
+    --font-color: #dddddd;
+    --link-hover: #ffffff;
+    --link-focus: rgba(221, 221, 221, 0.8);
+    
+    --btn-color: #1a1b2b;
+    --btn-hover: #3a3b52;
+    --btn-focus: #2c2d41;
 }
 
 * {
     margin: 0;
     padding: 0;
-    color: #dddddd;
+    color: var(--font-color);
     box-sizing: border-box;
 }
 
@@ -71,7 +78,7 @@ a {
 input {
     border: none;
     padding: 0 7px;
-    background-color: var(--input-color);
+    background-color: var(--input);
     transition-duration: 300ms;
     height: var(--input-default-height);
     font-size: var(--font-size);
@@ -85,22 +92,22 @@ input {
 
 button {
     border: none;
-    background-color: var(--btn-global-color);
+    color: var(--font-color);
     transition-duration: 300ms;
-    height: var(--input-default-height);
     font-size: var(--font-size);
-    color: var(--btn-color);
+    background-color: var(--btn-color);
+    height: var(--input-default-height);
 
     &:hover {
-        color: #ffffff;
+        color: var(--link-focus);
         transition-duration: 300ms;
-        background-color: rgba(72, 76, 90, 0.7);
+        background-color: var(--btn-hover);
     }
 
     &:focus {
+        color: var(--link-focus);
         transition-duration: 300ms;
-        color: rgba(255, 255, 255, 0.6);
-        background-color: rgba(52, 55, 66, 0.7);
+        background-color: var(--btn-focus);
     }
 }
 
