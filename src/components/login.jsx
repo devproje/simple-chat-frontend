@@ -57,7 +57,7 @@ export function Login({ createSocket, secure, setSecure, login, setLogin }) {
                 <button type="submit">Login</button>
             </form>
             <footer>
-                <strong>Simple Chat</strong> 2024 by <a href="https://github.com/devproje">Project_IO</a>.
+                <strong><a href="https://github.com/devproje/simple-chat-frontend">Simple Chat</a></strong> 2024 by <a href="https://github.com/devproje">Project_IO</a>.
                 This project is license for <strong><a href="https://github.com/devproje/simple-chat-frontend/blob/master/LICENSE">MIT</a></strong>.
             </footer>
         </>
