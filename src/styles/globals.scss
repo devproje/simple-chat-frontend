@@ -23,7 +23,9 @@
     --font-size: 13pt;
     --input-default-height: 35px;
 
-    --background: #0B0C16;
+    --background: #0b0c16;
+    --font-color: #eeeeee;
+    --input: #0b0c16;
 }
 
 * {
@@ -35,7 +37,7 @@
 
 html,
 body {
-    background-color: var(--background-color);
+    background-color: var(--background);
     overflow-x: hidden;
     max-width: 100vw;
     height: 100vh;
@@ -43,6 +45,7 @@ body {
 
 body {
     font-family: var(--font-default);
+    color: var(--font-color);
 
     display: flex;
     align-items: center;
