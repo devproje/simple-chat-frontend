@@ -5,10 +5,14 @@ import DOMPurify from "isomorphic-dompurify";
 import React, { useState } from "react";
 import { make } from "@/util/make";
 import { marked } from "marked";
-import { SideBar } from "./SideBar";
+import { SideBar } from "./sidebar";
 
-function send(ev, socket, ref) {
+function send(ev, socket, ref, isDisabled) {
     ev.preventDefault();
+
+    if (isDisabled === true) {
+        return;
+    }
     
     socket.send(make("new_message", ref.current.value));
     ref.current.value = "";
@@ -18,14 +22,9 @@ function replaceURL(src, type) {
     return src.replace("ws://", `${type}://`).replace("wss://", `${type}://`).replace("/ws", "");
 }
 
-function press(ev, ref) {
-    if (ev.keyCode == 13 && ev.shiftKey) {
-        ev.preventDefault();
-        ref.current.value += "\n";
-        console.log(ref.current.value);
-        return;
-    }
-
+function change(ev, ref, limit, setDisabled) {
+    ev.preventDefault();
+    setDisabled(ref.current.value.length > limit);
 }
 
 function sidebar(ev, setOpen) {
@@ -33,10 +32,12 @@ function sidebar(ev, setOpen) {
     setOpen(true);
 }
 
-export function Chat({ socket, secure }) {
+export function Chat({ socket, secure, setLogin }) {
+    const [isDisabled, setDisabled] = useState(false);
     const [messages, setMessages] = useState([]);
     const [isOpen, setOpen] = useState(false);
     const [users, setUsers] = useState([]);
+    const [limit, setLimit] = useState(300);
     const [name, setName] = useState(null);
     const chat = useChatScroll(messages);
     const value = React.createRef();
@@ -53,6 +54,7 @@ export function Chat({ socket, secure }) {
                 const url = `${replaceURL(socket.url, type)}/v1/server`;
                 fetch(url).then(data => data.json()).then((json) => {
                     setName(json.name);
+                    setLimit(json.content_length);
                 });
             }
             
@@ -110,16 +112,23 @@ export function Chat({ socket, secure }) {
                             </div>
                         ))}
                     </div>
-                    <form className={styles.reply} onSubmit={ev => send(ev, socket, value, btn)}>
+                    <form className={styles.reply} onSubmit={ev => send(ev, socket, value, btn, isDisabled)}>
                         <div>
-                            <input type="text" ref={value} onKeyDown={ev => press(ev, value)} placeholder="Type your message here" required />
-                            <button ref={btn} type="submit">Send</button>
+                            <input
+                                type="text"
+                                ref={value}
+                                placeholder="Type your message here"
+                                className={isDisabled ? styles.dis_text : ""}
+                                onChange={ev => change(ev, value, limit, setDisabled)}
+                                required
+                            />
+                            <button ref={btn} disabled={isDisabled} type="submit">Send</button>
                         </div>
                     </form>
                 </div>
             </div>
-            <div className={`${styles.sidebar} ${isOpen ? "open" : styles.closed}`}>
-                <SideBar isOpen={isOpen} setOpen={setOpen} />
+            <div className={`${styles.sidebar} ${isOpen ? "" : styles.closed}`}>
+                <SideBar socket={socket} users={users} setOpen={setOpen} setLogin={setLogin} />
             </div>
         </>
     );

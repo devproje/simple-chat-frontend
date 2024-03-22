@@ -8,7 +8,6 @@ function send(ref, addr, except, socket, [login, setLogin]) {
     }
 
     if (socket.readyState !== socket.OPEN) {
-        setFadeOut(false);
         except.current.innerText = "IRC Server is offline.";
         return;
     }

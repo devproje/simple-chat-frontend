@@ -1,10 +1,70 @@
 .sidebar {
     width: 100%;
     height: 100%;
-    background-color: #f4f4f4;
+    user-select: none;
+    background-color: var(--sidebar-background);
+    display: flex;
+    flex-direction: column;
+}
+
+.pane_title {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .close_btn {
     width: 50px;
+    display: flex;
+    padding: 0 5px;
+    margin-right: 10px;
     border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.leave_btn {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.user_list {
+    --item-height: 45px;
+    --padding: 20px;
+
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+
+    .online {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        height: var(--item-height);
+    }
+
+    .items {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        height: var(--item-height);
+        
+        :hover {
+            transition-duration: 300ms;
+            background-color: var(--chat-hover);
+        }
+        
+        h3 {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 var(--padding);
+            transition-duration: 300ms;
+        }
+    }
 }

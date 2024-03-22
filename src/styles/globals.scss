@@ -1,18 +1,18 @@
 @font-face {
-    font-family: "Pretendard";
     font-weight: 300;
+    font-family: "Pretendard";
     src: url("/fonts/PretendardVariable.woff2");
 }
 
 @font-face {
-    font-family: "JetBrainsMono";
     font-weight: 300;
+    font-family: "JetBrainsMono";
     src: url("/fonts/JetBrainsMono-Regular.woff2");
 }
 
 @font-face {
-    font-family: "NotoColorEmoji";
     font-weight: 300;
+    font-family: "NotoColorEmoji";
     src: url("/fonts/NotoColorEmoji-Regular.ttf");
 }
 
@@ -21,18 +21,25 @@
     --font-mono: "JetBrainsMono", serif;
 
     --font-size: 13pt;
+    --sidebar-width: 250px;
     --input-default-height: 35px;
 
-    --background: #0b0c16;
     --input: #18192b;
+    --background: #0b0c16;
+    --sidebar-background: #27283b;
     
     --font-color: #dddddd;
-    --link-hover: #ffffff;
-    --link-focus: rgba(221, 221, 221, 0.8);
+    --font-hover: #ffffff;
+    --font-focus: rgba(221, 221, 221, 0.8);
+
+    --chat-hover: rgba(255, 255, 255, 0.2);
     
-    --btn-color: #1a1b2b;
+    --btn-color: #3d3f57;
     --btn-hover: #3a3b52;
     --btn-focus: #2c2d41;
+    --error-color: #c94c4c;
+
+    --disabled: #888888;
 }
 
 * {
@@ -65,12 +72,12 @@ a {
     transition-duration: 300ms;
 
     &:hover {
-        color: #ffffff;
+        color: var(--font-hover);
         transition-duration: 300ms;
     }
 
     &:focus {
-        color: #cccccc;
+        color: var(--font-focus);
         transition-duration: 300ms;
     }
 }
@@ -92,20 +99,58 @@ input {
 
 button {
     border: none;
-    color: var(--font-color);
     transition-duration: 300ms;
     font-size: var(--font-size);
     background-color: var(--btn-color);
     height: var(--input-default-height);
 
+    &:disabled {
+        color: var(--disabled);
+        background-color: var(--btn-focus);
+
+        transition-duration: 300ms;
+
+        &:hover {
+            * {
+                color: var(--disabled);
+                transition-duration: 300ms;
+            }
+            
+            color: var(--disabled);
+            transition-duration: 300ms;
+            background-color: var(--btn-focus);
+        }
+
+        &:focus {
+            * {
+                color: var(--disabled);
+                transition-duration: 300ms;
+            }
+
+            color: var(--disabled);
+            transition-duration: 300ms;
+            background-color: var(--btn-focus);
+        }
+    }
+
     &:hover {
-        color: var(--link-focus);
+        * {
+            color: var(--font-hover);
+            transition-duration: 300ms;
+        }
+
+        color: var(--font-hover);
         transition-duration: 300ms;
         background-color: var(--btn-hover);
     }
 
     &:focus {
-        color: var(--link-focus);
+        * {
+            color: var(--font-focus);
+            transition-duration: 300ms;
+        }
+
+        color: var(--font-focus);
         transition-duration: 300ms;
         background-color: var(--btn-focus);
     }
